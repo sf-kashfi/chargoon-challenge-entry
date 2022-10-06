@@ -1,18 +1,27 @@
 import { useEffect, useContext, useState, useMemo } from "react";
-import Form from "./Components/Detail";
+import Form from "./Components/Form";
 import Sidebar from "./Components/Sidebar";
 import ExtendedTree from './Components/Tree'
-import { createMockData } from "./Components/Tree/mockData";
+import { getNodes } from "./transportLayer";
 
 function App() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showEdit, setShowEdit] = useState(true);
-  const treeData = useMemo(() => createMockData(), []);
-  
+  const [treeData, setTreeData] = useState([]);
+
+  const fetchTreeData = async () => {
+    const result = await getNodes();
+    setTreeData(result);
+  }
+
+  useEffect(() => {
+    fetchTreeData()
+  }, [])
+
   const handleContextMenuClick = (actionKey: any) => {
-    switch(actionKey){
+    switch (actionKey) {
       case '':
-      break;
+        break;
     }
   }
 
@@ -21,12 +30,12 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <Sidebar>
-        <ExtendedTree treeData={treeData} handleContextMenuClick={handleContextMenuClick} />
-      </Sidebar>
-      {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} />}
-    </div>
+      <div className="App">
+        <Sidebar>
+          <ExtendedTree treeData={treeData} handleContextMenuClick={handleContextMenuClick} />
+        </Sidebar>
+        {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} />}
+      </div>
   );
 }
 

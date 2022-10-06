@@ -14,7 +14,6 @@ root.render(
     <ConfigProvider direction="rtl">
       <App />
     </ConfigProvider>
-
   </React.StrictMode>
 );
 

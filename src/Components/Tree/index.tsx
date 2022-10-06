@@ -2,7 +2,6 @@ import { Input, Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import React, { useMemo, useRef, useState } from 'react';
 import { NodeType } from '../../types';
-import { createMockData } from './mockData';
 import Node from './node';
 import SearchResult from './searchResult';
 

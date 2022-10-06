@@ -4,4 +4,5 @@ export interface NodeType {
 	children?: NodeType[];
 	parentKey?: string;
 	data?: any[];
+	hierarchy: string[]
 }

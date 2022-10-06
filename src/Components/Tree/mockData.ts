@@ -1,6 +1,6 @@
 import { NodeType } from "../../types";
 
-export function createMockData(): NodeType[]{
+export function createTreeMockData(): NodeType[] {
 	return [
 		{
 			key: '1',
@@ -8,16 +8,32 @@ export function createMockData(): NodeType[]{
 			children: [
 				{
 					key: '2',
-					title: 'A',
-					parentKey: '1'
-				},
-				{
-					key: '3',
-					title: 'B',
-					parentKey: '1'
-				},
+					title: 'یاور کاردوست(مدیرعامل)',
+					parentKey: '1',
+					hierarchy: ['1', '2'],
+					children: [
+						{
+							key: '3',
+							title: 'محسن پاکدل(مدیرفنی)',
+							parentKey: '2',
+							hierarchy: ['1', '2', '3'],
+							children: [
+								{
+									key: '4',
+									title: 'علیرضا گلزاده(کارشناس رابط کاربری)',
+									parentKey: '3',
+									hierarchy: ['1', '2', '3', '4'],
+									children: [
+		
+									]
+								}
+							]
+						}
+					]
+				}
 			],
-			parentKey: null
+			parentKey: null,
+			hierarchy: []
 		}
 	]
 }
