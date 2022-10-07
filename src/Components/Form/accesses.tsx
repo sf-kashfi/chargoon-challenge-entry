@@ -6,15 +6,12 @@ interface Props {
 	initialValue?: any;
 }
 
-
-
 function Accesses({ }: Props) {
 	const [options, setOptions] = useState([]);
-	
+
 	const fetchAccessList = async () => {
 		const result = await getAccessList();
 		setOptions(result);
-
 	}
 
 	useEffect(() => {
@@ -28,7 +25,6 @@ function Accesses({ }: Props) {
 
 	return (
 		<Checkbox.Group options={options as any} onChange={handleOnChange} />
-
 	);
 }
 export default Accesses

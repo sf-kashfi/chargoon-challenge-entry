@@ -21,7 +21,7 @@ function Form({ item, updateNode }: Props) {
 
 	return (
 		<div className='detail'>
-			<div >
+			<div>
 				<Tabs >
 					<Tabs.TabPane tab="اطلاعات اصلی" key="item-1">
 						<div className='form-content'>

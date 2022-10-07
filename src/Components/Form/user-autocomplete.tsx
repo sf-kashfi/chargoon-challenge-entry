@@ -1,19 +1,19 @@
 import { AutoComplete, Button } from 'antd';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { getUsers } from '../../transportLayer';
 
 
 const UserAutoComplete: React.FC = () => {
-	const orginalOptions = useRef([
-		{
-			value: '1',
-			label: '1'
-		},
-		{
-			value: '2',
-			label: '2'
-		}
-	])
-  const [options, setOptions] = useState<{ value: string }[]>(orginalOptions.current);
+  const orginalOptions = useRef([]);
+  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+
+  useEffect(() => {
+    getUsers().then((users) => {
+      orginalOptions.current = users;
+      setOptions(users);
+    })
+  }, []);
+
 
   const onSearch = (searchText: string) => {
     setOptions(

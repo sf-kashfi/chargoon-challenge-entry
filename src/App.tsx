@@ -1,8 +1,10 @@
 import { useEffect, useContext, useState, useMemo } from "react";
+import AppContext from "./appContext";
 import Form from "./Components/Form";
 import Sidebar from "./Components/Sidebar";
 import ExtendedTree from './Components/Tree'
 import { getNodes } from "./transportLayer";
+import { NodeType } from "./types";
 
 function App() {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -25,17 +27,28 @@ function App() {
     }
   }
 
+  const handleUpdateTree = (nodes: NodeType[]) => {
+
+  }
+
   const handleUpdateNode = (key: string, data: any) => {
 
   }
 
   return (
+    <AppContext.Provider
+      value={{
+        treeData,
+        updateTreeData: handleUpdateTree
+      }}
+    >
       <div className="App">
         <Sidebar>
-          <ExtendedTree treeData={treeData} handleContextMenuClick={handleContextMenuClick} />
+          <ExtendedTree handleContextMenuClick={handleContextMenuClick} />
         </Sidebar>
         {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} />}
       </div>
+    </AppContext.Provider>
   );
 }
 

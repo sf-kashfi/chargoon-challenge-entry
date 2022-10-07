@@ -17,7 +17,7 @@ function BasicInformation({ }: Props) {
 			<Form.Item name="code" label="کد" labelCol={{ span: 2 }}>
 				<Input />
 			</Form.Item>
-			<Form.Item name="user" label="کاربران" labelCol={{ span: 2 }}>
+			<Form.Item name="users" label="کاربران" labelCol={{ span: 2 }}>
 				<UserAutoComplete />
 			</Form.Item>
 		</Form>
