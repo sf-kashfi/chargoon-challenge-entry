@@ -18,6 +18,7 @@ export function createTreeMockData(): NodeType[] {
 							isDefault: true
 						}
 					],
+					accesses: [],
 					children: [
 						{
 							key: '3',
@@ -46,13 +47,16 @@ export function createTreeMockData(): NodeType[] {
 											isDefault: false
 										}
 									],
-									children: []
+									children: [],
+									accesses: [],
 								}
-							]
+							],
+							accesses: [],
 						}
 					]
 				}
 			],
+			accesses: [],
 			parentKey: null,
 			hierarchy: []
 		}
