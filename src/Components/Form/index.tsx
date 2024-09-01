@@ -10,10 +10,11 @@ import UsersList from './user-autocomplete';
 
 interface Props {
 	item: any;
-	updateNode: (key: string, data: any) => void
+	updateNode: (key: string, data: any) => void;
+	showTable: boolean
 }
 
-function Form({ item, updateNode }: Props) {
+function Form({ item, updateNode, showTable }: Props) {
 
 	const handleSave = () => {
 		updateNode('key', {})
@@ -25,7 +26,7 @@ function Form({ item, updateNode }: Props) {
 				<Tabs >
 					<Tabs.TabPane tab="اطلاعات اصلی" key="item-1">
 						<div className='form-content'>
-							<BasicInformation initialValue={item?.data.basicInformation} />
+							<BasicInformation initialValue={item?.data.basicInformation} showTable={showTable} />
 						</div>
 					</Tabs.TabPane>
 					<Tabs.TabPane tab="دسترسی ها" key="item-2">

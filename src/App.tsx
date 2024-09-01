@@ -9,6 +9,7 @@ import { NodeType } from "./types";
 function App() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showEdit, setShowEdit] = useState(true);
+  const [showTable, setShowTable] = useState(false);
   const [treeData, setTreeData] = useState([]);
   const [cutNode, setCutNode] = useState(null);
 
@@ -23,6 +24,9 @@ function App() {
 
   const handleContextMenuClick = (actionKey: string, nodeKey: string) => {
     switch (actionKey) {
+      case "ACTION1":
+        setShowTable(true);
+        break;
       case "ACTION2":
         const nodeToCut = findNodeByKey(nodeKey, treeData);
         setCutNode(nodeToCut);
@@ -100,7 +104,7 @@ function App() {
         <Sidebar>
           <ExtendedTree handleContextMenuClick={handleContextMenuClick} />
         </Sidebar>
-        {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} />}
+        {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} showTable={showTable} />}
       </div>
     </AppContext.Provider>
   );
