@@ -1,23 +1,23 @@
 // @ts-nocheck
-import React from 'react';
-import { ContextMenuTrigger, ContextMenu, ContextMenuItem } from 'rctx-contextmenu';
+import React from "react";
+import {
+  ContextMenuTrigger,
+  ContextMenu,
+  ContextMenuItem,
+} from "rctx-contextmenu";
 
 export function ContextMenuTriggerEx({ id, title }) {
-    return (<ContextMenuTrigger
-        id={id}
-    >
-        {title}
-    </ContextMenuTrigger>)
+  return <ContextMenuTrigger id={id}>{title}</ContextMenuTrigger>;
 }
 
 export function ContextMenuEx({ id, children }) {
-    return (<ContextMenu id={id}>
-        {children}
-    </ContextMenu>)
+  return <ContextMenu id={id}>{children}</ContextMenu>;
 }
 
-export function ContextMenuItemEx({ title, handleClick }) {
-    return (
-        <ContextMenuItem onClick={handleClick}>{title}</ContextMenuItem>
-    );
+export function ContextMenuItemEx({ title, handleClick, action, nodeKey }) {
+  return (
+    <ContextMenuItem onClick={() => handleClick(action, nodeKey)}>
+      {title}
+    </ContextMenuItem>
+  );
 }
