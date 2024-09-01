@@ -12,6 +12,7 @@ interface Props {
 }
 
 function Node({ node, handleContextMenuClick }: Props) {
+  const hasChildren = node.children && node.children.length > 0;
   return (
     <div>
       {/* NOTICE: id must be unique between EVERY <ContextMenuTrigger> and <ContextMenu> pair */}
@@ -20,7 +21,7 @@ function Node({ node, handleContextMenuClick }: Props) {
 
       <ContextMenuEx id={node.key}>
         <ContextMenuItemEx handleClick={handleContextMenuClick} action={'ACTION1'} nodeKey={node.key} title={"افزودن زیرشاخه"} />
-        <ContextMenuItemEx handleClick={handleContextMenuClick} action={'ACTION2'} nodeKey={node.key} title={"برش"} />
+        <ContextMenuItemEx handleClick={handleContextMenuClick} action={'ACTION2'} nodeKey={node.key} title={"برش"} disabled={hasChildren} />
         <ContextMenuItemEx handleClick={handleContextMenuClick} action={'ACTION3'} nodeKey={node.key} title={"چسباندن"} />
         <ContextMenuItemEx handleClick={handleContextMenuClick} action={'ACTION4'} nodeKey={node.key} title={"حذف"} />
       </ContextMenuEx>
