@@ -10,6 +10,7 @@ function App() {
   const [selectedItem, setSelectedItem] = useState(null);
   const [showEdit, setShowEdit] = useState(true);
   const [treeData, setTreeData] = useState([]);
+  const [cutNode, setCutNode] = useState(null);
 
   const fetchTreeData = async () => {
     const result = await getNodes();
@@ -22,6 +23,18 @@ function App() {
 
   const handleContextMenuClick = (actionKey: string, nodeKey: string) => {
     switch (actionKey) {
+      case "ACTION2":
+        const nodeToCut = findNodeByKey(nodeKey, treeData);
+        setCutNode(nodeToCut);
+        break;
+      case "ACTION3":
+        if (cutNode) {
+          let newTreeData = removeNode(cutNode.key, treeData);
+          newTreeData = addNodeAsChild(nodeKey, cutNode, newTreeData);
+          setCutNode(null);
+          handleUpdateTree(newTreeData);
+        }
+        break;
       case "ACTION4":
         const node = findNodeByKey(nodeKey, treeData);
         if (node && (!node.children || node.children.length === 0)) {
@@ -58,6 +71,21 @@ function App() {
         node.children = removeNode(key, node.children);
       }
       return true;
+    });
+  };
+
+  const addNodeAsChild = (
+    parentKey: string,
+    newNode: NodeType,
+    nodes: NodeType[]
+  ): NodeType[] => {
+    return nodes.map((node) => {
+      if (node.key === parentKey) {
+        node.children = node.children ? [...node.children, newNode] : [newNode];
+      } else if (node.children) {
+        node.children = addNodeAsChild(parentKey, newNode, node.children);
+      }
+      return node;
     });
   };
 
