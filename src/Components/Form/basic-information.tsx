@@ -1,4 +1,4 @@
-import { Form, Input } from 'antd';
+import { Form, Input, Button } from 'antd';
 import React from 'react';
 import UserAutoComplete from './user-autocomplete';
 
@@ -19,6 +19,11 @@ function BasicInformation({ }: Props) {
 			</Form.Item>
 			<Form.Item name="users" label="کاربران" labelCol={{ span: 2 }}>
 				<UserAutoComplete />
+			</Form.Item>
+			<Form.Item wrapperCol={{ offset: 2 }}>
+				<Button type="primary" htmlType="submit">
+					ذخیره
+				</Button>
 			</Form.Item>
 		</Form>
 	);
