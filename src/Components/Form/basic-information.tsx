@@ -58,11 +58,6 @@ function BasicInformation({ showTable }: Props) {
           />
         </Form.Item>
       )}
-      <Form.Item wrapperCol={{ offset: 2 }}>
-        <Button type="primary" htmlType="submit">
-          ذخیره
-        </Button>
-      </Form.Item>
     </Form>
   );
 }

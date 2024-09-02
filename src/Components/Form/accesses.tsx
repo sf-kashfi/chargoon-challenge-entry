@@ -20,15 +20,6 @@ function Accesses({}: Props) {
 
   function handleOnChange() {}
 
-  return (
-    <div>
-      <Checkbox.Group options={options as any} onChange={handleOnChange} />
-      <div style={{ marginTop: 16 }}>
-        <Button type="primary">
-          ذخیره
-        </Button>
-      </div>
-    </div>
-  );
+  return <Checkbox.Group options={options as any} onChange={handleOnChange} />;
 }
 export default Accesses;
