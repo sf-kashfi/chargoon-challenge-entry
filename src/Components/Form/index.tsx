@@ -26,7 +26,7 @@ function Form({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="اطلاعات اصلی" key="item-1">
             <div className="form-content">
               <BasicInformation
-                initialValue={item?.data.basicInformation}
+                initialValue={item?.data?.basicInformation}
                 showTable={showTable}
               />
             </div>
@@ -34,7 +34,7 @@ function Form({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="دسترسی ها" key="item-2">
             <div className="form-content">
               <ErrorBoundry>
-                <Accesses initialValue={item?.data.accesses} />
+                <Accesses initialValue={item?.data?.accesses} />
               </ErrorBoundry>
             </div>
           </Tabs.TabPane>

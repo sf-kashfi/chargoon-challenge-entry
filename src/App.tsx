@@ -25,6 +25,8 @@ function App() {
   const handleContextMenuClick = (actionKey: string, nodeKey: string) => {
     switch (actionKey) {
       case "ACTION1":
+        const nodeToEdit = findNodeByKey(nodeKey, treeData);
+        setSelectedItem(nodeToEdit);
         setShowTable(true);
         break;
       case "ACTION2":
