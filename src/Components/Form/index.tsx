@@ -27,7 +27,7 @@ function Form({ item, updateNode, showTable }: Props) {
             <div className="form-content">
               <BasicInformation
                 initialValue={item?.data?.basicInformation}
-                showTable={showTable}
+                item={item}
               />
             </div>
           </Tabs.TabPane>

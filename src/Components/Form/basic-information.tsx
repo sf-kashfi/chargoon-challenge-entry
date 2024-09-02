@@ -1,22 +1,30 @@
-import { Form, Input, Button, Table } from "antd";
-import { useState } from "react";
+import { Form, Input, Button, Checkbox } from "antd";
+import { useEffect, useState } from "react";
 import UserAutoComplete from "./user-autocomplete";
 import CustomTable from "./customTable";
 
 interface Props {
   initialValue?: any;
-  showTable?: boolean;
+  item?: any;
 }
 
-function BasicInformation({ showTable }: Props) {
+function BasicInformation({ item }: Props) {
   const [form] = Form.useForm();
-  const [dataSource, setDataSource] = useState([
-    { key: "1", code: "001", default: true },
-    { key: "2", code: "003", default: false },
-    { key: "3", code: "004", default: false },
-    { key: "4", code: "005", default: false },
-    { key: "5", code: "006", default: false },
-  ]);
+  const [dataSource, setDataSource] = useState([]);
+
+  useEffect(() => {
+    if (item?.users && item.users.length > 0) {
+      setDataSource(
+        item.users.map((user: any, index: any) => ({
+          key: `${index + 1}`,
+          code: user.title,
+          default: user.isDefault,
+        }))
+      );
+    } else {
+      setDataSource([]);
+    }
+  }, [item]);
 
   const handleDelete = (key: string) => {
     setDataSource(dataSource.filter((item) => item.key !== key));
@@ -32,9 +40,32 @@ function BasicInformation({ showTable }: Props) {
   };
 
   const columns = [
-    { title: "عملیات", dataIndex: "actions", key: "actions" },
-    { title: "پیشفرض", dataIndex: "default", key: "default" },
-    { title: "کد", dataIndex: "code", key: "code" },
+    {
+      title: "عملیات",
+      dataIndex: "actions",
+      key: "actions",
+      render: (_: any, record: any) => (
+        <Button type="link" onClick={() => handleDelete(record.key)}>
+          حذف
+        </Button>
+      ),
+    },
+    {
+      title: "پیشفرض",
+      dataIndex: "default",
+      key: "default",
+      render: (defaultValue: boolean, record: any) => (
+        <Checkbox
+          checked={defaultValue}
+          onChange={(e) => handleDefaultChange(record.key, e.target.checked)}
+        />
+      ),
+    },
+    {
+      title: "کد",
+      dataIndex: "code",
+      key: "code",
+    },
   ];
 
   return (
@@ -48,7 +79,7 @@ function BasicInformation({ showTable }: Props) {
       <Form.Item name="users" label="کاربران" labelCol={{ span: 2 }}>
         <UserAutoComplete />
       </Form.Item>
-      {showTable && (
+      {dataSource.length > 0 && (
         <Form.Item wrapperCol={{ offset: 2 }}>
           <CustomTable
             columns={columns}
