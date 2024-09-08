@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState, useMemo } from "react";
 import AppContext from "./appContext";
-import Form from "./Components/Form";
+import FormComponent from "./Components/Form";
 import Sidebar from "./Components/Sidebar";
 import ExtendedTree from "./Components/Tree";
 import { getNodes } from "./transportLayer";
@@ -106,7 +106,7 @@ function App() {
         <Sidebar>
           <ExtendedTree handleContextMenuClick={handleContextMenuClick} />
         </Sidebar>
-        {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} showTable={showTable} />}
+        {showEdit && <FormComponent item={selectedItem} updateNode={handleUpdateNode} showTable={showTable} />}
       </div>
     </AppContext.Provider>
   );

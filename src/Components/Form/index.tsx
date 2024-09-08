@@ -14,7 +14,7 @@ interface Props {
   showTable: boolean;
 }
 
-function Form({ item, updateNode, showTable }: Props) {
+function FormComponent({ item, updateNode, showTable }: Props) {
   const handleSave = () => {
     updateNode("key", {});
   };
@@ -47,4 +47,4 @@ function Form({ item, updateNode, showTable }: Props) {
     </div>
   );
 }
-export default Form;
+export default FormComponent;
