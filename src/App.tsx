@@ -53,7 +53,23 @@ function App() {
     setTreeData(nodes);
   };
 
-  const handleUpdateNode = (key: string, data: any) => {};
+  const handleUpdateNode = (key: string, data: any) => {
+    if (selectedItem.key) {
+      const newNode: NodeType = {
+        key: `${new Date().getTime()}`,
+        title: data.title,
+        users: data.users || [],
+        children: [],
+        parentKey: selectedItem.key,
+        hierarchy: [],
+        accesses: data.accesses || [],
+      };
+
+      const newTreeData = addNodeAsChild(selectedItem.key, newNode, treeData);
+      setTreeData(newTreeData);
+      setSelectedItem(null);
+    }
+  };
 
   const findNodeByKey = (key: string, nodes: NodeType[]): any => {
     for (let node of nodes) {
