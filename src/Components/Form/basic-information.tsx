@@ -6,10 +6,11 @@ import CustomTable from "./customTable";
 interface Props {
   initialValue?: any;
   item?: any;
+  form?: any;
 }
 
-function BasicInformation({ item }: Props) {
-  const [form] = Form.useForm();
+function BasicInformation({ item , form}: Props) {
+
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {

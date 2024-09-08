@@ -1,4 +1,4 @@
-import { Input, Tabs, Button } from "antd";
+import { Form, Input, Tabs, Button } from "antd";
 import React from "react";
 import ErrorBoundry from "../../ErrorBoundry";
 import ActionBar from "../ActionBar";
@@ -11,12 +11,32 @@ import UsersList from "./user-autocomplete";
 interface Props {
   item: any;
   updateNode: (key: string, data: any) => void;
-  showTable: boolean;
 }
 
-function FormComponent({ item, updateNode, showTable }: Props) {
-  const handleSave = () => {
-    updateNode("key", {});
+function FormComponent({ item, updateNode }: Props) {
+  const [basicForm] = Form.useForm();
+  const [accessForm] = Form.useForm();
+
+  // const handleSave = () => {
+  //   updateNode("key", {});
+  // };
+
+  const handleSave = async () => {
+    try {
+      
+      const basicInfo = await basicForm.validateFields();
+      const accesses = accessForm.getFieldsValue();
+
+      
+      const formData = {
+        ...basicInfo,
+        accesses: accesses.accesses,
+      };
+
+      updateNode(item?.key, formData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
   };
 
   return (
@@ -26,6 +46,7 @@ function FormComponent({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="اطلاعات اصلی" key="item-1">
             <div className="form-content">
               <BasicInformation
+                form={basicForm}
                 initialValue={item?.data?.basicInformation}
                 item={item}
               />
@@ -34,7 +55,10 @@ function FormComponent({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="دسترسی ها" key="item-2">
             <div className="form-content">
               <ErrorBoundry>
-                <Accesses initialValue={item?.data?.accesses} />
+                <Accesses
+                  form={accessForm}
+                  initialValue={item?.data?.accesses}
+                />
               </ErrorBoundry>
             </div>
           </Tabs.TabPane>
