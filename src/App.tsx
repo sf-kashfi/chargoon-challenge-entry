@@ -8,7 +8,7 @@ import { NodeType } from "./types";
 
 function App() {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [showEdit, setShowEdit] = useState(true);
+  const [showEdit, setShowEdit] = useState(false);
   const [treeData, setTreeData] = useState([]);
   const [cutNode, setCutNode] = useState(null);
 
@@ -26,6 +26,7 @@ function App() {
       case "ACTION1":
         const nodeToEdit = findNodeByKey(nodeKey, treeData);
         setSelectedItem(nodeToEdit);
+        setShowEdit(true);
         break;
       case "ACTION2":
         const nodeToCut = findNodeByKey(nodeKey, treeData);
@@ -54,20 +55,21 @@ function App() {
   };
 
   const handleUpdateNode = (key: string, data: any) => {
-    if (selectedItem.key) {
+    if (selectedItem?.key) {
       const newNode: NodeType = {
         key: `${new Date().getTime()}`,
         title: data.title,
         users: data.users || [],
         children: [],
         parentKey: selectedItem.key,
-        hierarchy: [],
+        hierarchy: [...selectedItem.hierarchy, `${new Date().getTime()}`],
         accesses: data.accesses || [],
       };
 
       const newTreeData = addNodeAsChild(selectedItem.key, newNode, treeData);
       setTreeData(newTreeData);
-      setSelectedItem(null);
+      setSelectedItem(newNode);
+      setShowEdit(false);
     }
   };
 
@@ -118,11 +120,13 @@ function App() {
     >
       <div className="App">
         <Sidebar>
-          <ExtendedTree handleContextMenuClick={handleContextMenuClick} />
+          <ExtendedTree
+            handleContextMenuClick={handleContextMenuClick}
+            setSelectedItem={setSelectedItem}
+          />
         </Sidebar>
-        {showEdit && (
-          <FormComponent item={selectedItem} updateNode={handleUpdateNode} />
-        )}
+
+        <FormComponent item={selectedItem} updateNode={handleUpdateNode} showEdit={showEdit} />
       </div>
     </AppContext.Provider>
   );

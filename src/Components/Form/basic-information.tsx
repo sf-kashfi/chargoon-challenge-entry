@@ -9,11 +9,17 @@ interface Props {
   form?: any;
 }
 
-function BasicInformation({ item , form}: Props) {
+function BasicInformation({ initialValue, item , form}: Props) {
 
   const [dataSource, setDataSource] = useState([]);
 
   useEffect(() => {
+    if (initialValue) {
+      form.setFieldsValue(initialValue || {});
+    } else {
+      form.resetFields(); 
+    }
+
     if (item?.users && item.users.length > 0) {
       setDataSource(
         item.users.map((user: any, index: any) => ({
@@ -25,7 +31,7 @@ function BasicInformation({ item , form}: Props) {
     } else {
       setDataSource([]);
     }
-  }, [item]);
+  }, [item, initialValue]);
 
   const handleDelete = (key: string) => {
     setDataSource(dataSource.filter((item) => item.key !== key));

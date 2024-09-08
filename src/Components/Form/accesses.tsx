@@ -7,8 +7,17 @@ interface Props {
   form?: any;
 }
 
-function Accesses({ form }: Props) {
+function Accesses({ initialValue, form }: Props) {
   const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (initialValue) {
+      form.setFieldsValue({ accesses: initialValue });
+    } else {
+      form.resetFields(); 
+    }
+
+  }, [initialValue]);
 
   const fetchAccessList = async () => {
     const result = await getAccessList();

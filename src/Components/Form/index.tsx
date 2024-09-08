@@ -1,5 +1,5 @@
 import { Form, Input, Tabs, Button } from "antd";
-import React from "react";
+import {useEffect} from "react";
 import ErrorBoundry from "../../ErrorBoundry";
 import ActionBar from "../ActionBar";
 import ArrowDownIcon from "../SvgIcons/arrow-down";
@@ -11,23 +11,18 @@ import UsersList from "./user-autocomplete";
 interface Props {
   item: any;
   updateNode: (key: string, data: any) => void;
+  showEdit: boolean;
 }
 
-function FormComponent({ item, updateNode }: Props) {
+function FormComponent({ item, updateNode, showEdit }: Props) {
   const [basicForm] = Form.useForm();
   const [accessForm] = Form.useForm();
 
-  // const handleSave = () => {
-  //   updateNode("key", {});
-  // };
-
   const handleSave = async () => {
     try {
-      
       const basicInfo = await basicForm.validateFields();
       const accesses = accessForm.getFieldsValue();
 
-      
       const formData = {
         ...basicInfo,
         accesses: accesses.accesses,
@@ -39,6 +34,16 @@ function FormComponent({ item, updateNode }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (!showEdit) {
+      basicForm.setFieldsValue(item);
+      accessForm.setFieldsValue({ accesses: item?.accesses });
+    } else {
+      basicForm.resetFields();
+      accessForm.resetFields();
+    }
+  }, [item]);
+
   return (
     <div className="detail">
       <div>
@@ -47,7 +52,7 @@ function FormComponent({ item, updateNode }: Props) {
             <div className="form-content">
               <BasicInformation
                 form={basicForm}
-                initialValue={item?.data?.basicInformation}
+                initialValue={!showEdit ?item : null}
                 item={item}
               />
             </div>
@@ -57,7 +62,7 @@ function FormComponent({ item, updateNode }: Props) {
               <ErrorBoundry>
                 <Accesses
                   form={accessForm}
-                  initialValue={item?.data?.accesses}
+                  initialValue={!showEdit? item?.accesses: null}
                 />
               </ErrorBoundry>
             </div>
