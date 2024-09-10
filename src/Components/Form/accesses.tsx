@@ -1,13 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Checkbox, Button } from "antd";
+import { Form, Checkbox, Button } from "antd";
 import { getAccessList } from "../../transportLayer";
 
 interface Props {
   initialValue?: any;
+  form?: any;
 }
 
-function Accesses({}: Props) {
+function Accesses({ initialValue, form }: Props) {
   const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    if (initialValue) {
+      form.setFieldsValue({ accesses: initialValue });
+    } else {
+      form.resetFields(); 
+    }
+
+  }, [initialValue]);
 
   const fetchAccessList = async () => {
     const result = await getAccessList();
@@ -20,6 +30,12 @@ function Accesses({}: Props) {
 
   function handleOnChange() {}
 
-  return <Checkbox.Group options={options as any} onChange={handleOnChange} />;
+  return (
+    <Form form={form}>
+      <Form.Item name="accesses">
+        <Checkbox.Group options={options as any} onChange={handleOnChange} />
+      </Form.Item>
+    </Form>
+  );
 }
 export default Accesses;

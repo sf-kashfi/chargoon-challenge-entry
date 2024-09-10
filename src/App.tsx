@@ -1,6 +1,6 @@
 import { useEffect, useContext, useState, useMemo } from "react";
 import AppContext from "./appContext";
-import Form from "./Components/Form";
+import FormComponent from "./Components/Form";
 import Sidebar from "./Components/Sidebar";
 import ExtendedTree from "./Components/Tree";
 import { getNodes } from "./transportLayer";
@@ -8,8 +8,7 @@ import { NodeType } from "./types";
 
 function App() {
   const [selectedItem, setSelectedItem] = useState(null);
-  const [showEdit, setShowEdit] = useState(true);
-  const [showTable, setShowTable] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [treeData, setTreeData] = useState([]);
   const [cutNode, setCutNode] = useState(null);
 
@@ -27,7 +26,7 @@ function App() {
       case "ACTION1":
         const nodeToEdit = findNodeByKey(nodeKey, treeData);
         setSelectedItem(nodeToEdit);
-        setShowTable(true);
+        setShowEdit(true);
         break;
       case "ACTION2":
         const nodeToCut = findNodeByKey(nodeKey, treeData);
@@ -55,7 +54,24 @@ function App() {
     setTreeData(nodes);
   };
 
-  const handleUpdateNode = (key: string, data: any) => {};
+  const handleUpdateNode = (key: string, data: any) => {
+    if (selectedItem?.key) {
+      const newNode: NodeType = {
+        key: `${new Date().getTime()}`,
+        title: data.title,
+        users: data.users || [],
+        children: [],
+        parentKey: selectedItem.key,
+        hierarchy: [...selectedItem.hierarchy, `${new Date().getTime()}`],
+        accesses: data.accesses || [],
+      };
+
+      const newTreeData = addNodeAsChild(selectedItem.key, newNode, treeData);
+      setTreeData(newTreeData);
+      setSelectedItem(newNode);
+      setShowEdit(false);
+    }
+  };
 
   const findNodeByKey = (key: string, nodes: NodeType[]): any => {
     for (let node of nodes) {
@@ -104,9 +120,13 @@ function App() {
     >
       <div className="App">
         <Sidebar>
-          <ExtendedTree handleContextMenuClick={handleContextMenuClick} />
+          <ExtendedTree
+            handleContextMenuClick={handleContextMenuClick}
+            setSelectedItem={setSelectedItem}
+          />
         </Sidebar>
-        {showEdit && <Form item={selectedItem} updateNode={handleUpdateNode} showTable={showTable} />}
+
+        <FormComponent item={selectedItem} updateNode={handleUpdateNode} showEdit={showEdit} />
       </div>
     </AppContext.Provider>
   );

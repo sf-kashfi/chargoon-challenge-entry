@@ -1,5 +1,5 @@
-import { Input, Tabs, Button } from "antd";
-import React from "react";
+import { Form, Input, Tabs, Button } from "antd";
+import {useEffect} from "react";
 import ErrorBoundry from "../../ErrorBoundry";
 import ActionBar from "../ActionBar";
 import ArrowDownIcon from "../SvgIcons/arrow-down";
@@ -11,13 +11,38 @@ import UsersList from "./user-autocomplete";
 interface Props {
   item: any;
   updateNode: (key: string, data: any) => void;
-  showTable: boolean;
+  showEdit: boolean;
 }
 
-function Form({ item, updateNode, showTable }: Props) {
-  const handleSave = () => {
-    updateNode("key", {});
+function FormComponent({ item, updateNode, showEdit }: Props) {
+  const [basicForm] = Form.useForm();
+  const [accessForm] = Form.useForm();
+
+  const handleSave = async () => {
+    try {
+      const basicInfo = await basicForm.validateFields();
+      const accesses = accessForm.getFieldsValue();
+
+      const formData = {
+        ...basicInfo,
+        accesses: accesses.accesses,
+      };
+
+      updateNode(item?.key, formData);
+    } catch (error) {
+      console.error("Error saving data:", error);
+    }
   };
+
+  useEffect(() => {
+    if (!showEdit) {
+      basicForm.setFieldsValue(item);
+      accessForm.setFieldsValue({ accesses: item?.accesses });
+    } else {
+      basicForm.resetFields();
+      accessForm.resetFields();
+    }
+  }, [item]);
 
   return (
     <div className="detail">
@@ -26,7 +51,8 @@ function Form({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="اطلاعات اصلی" key="item-1">
             <div className="form-content">
               <BasicInformation
-                initialValue={item?.data?.basicInformation}
+                form={basicForm}
+                initialValue={!showEdit ?item : null}
                 item={item}
               />
             </div>
@@ -34,7 +60,10 @@ function Form({ item, updateNode, showTable }: Props) {
           <Tabs.TabPane tab="دسترسی ها" key="item-2">
             <div className="form-content">
               <ErrorBoundry>
-                <Accesses initialValue={item?.data?.accesses} />
+                <Accesses
+                  form={accessForm}
+                  initialValue={!showEdit? item?.accesses: null}
+                />
               </ErrorBoundry>
             </div>
           </Tabs.TabPane>
@@ -47,4 +76,4 @@ function Form({ item, updateNode, showTable }: Props) {
     </div>
   );
 }
-export default Form;
+export default FormComponent;
