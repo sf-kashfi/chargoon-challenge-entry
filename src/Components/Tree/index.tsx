@@ -1,10 +1,10 @@
-import { Input, Tree } from 'antd';
-import type { DataNode } from 'antd/es/tree';
-import React, { useContext, useMemo, useRef, useState } from 'react';
-import AppContext from '../../appContext';
-import { NodeType } from '../../types';
-import Node from './node';
-import SearchResult from './searchResult';
+import { Input, Tree } from "antd";
+import type { DataNode } from "antd/es/tree";
+import React, { useContext, useMemo, useRef, useState } from "react";
+import AppContext from "../../appContext";
+import { NodeType } from "../../types";
+import Node from "./node";
+import SearchResult from "./searchResult";
 
 const { Search } = Input;
 
@@ -15,30 +15,65 @@ interface Props {
 const TreeExtended: React.FC<Props> = ({ handleContextMenuClick }) => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState(true);
-  const searchedKeyword = useRef();
-  const [searchResultVisible, setSearchResultVisible] = useState(true);
+  const searchedKeyword = useRef<string>("");
+  const [searchResultVisible, setSearchResultVisible] = useState(false);
+  const [searchResultOpen, setSearchResultOpen] = useState(true);
+  const [filteredData, setFilteredData] = useState([]);
   const { treeData } = useContext(AppContext);
-  
+
   const onExpand = (newExpandedKeys: any[]) => {
     setExpandedKeys(newExpandedKeys);
     setAutoExpandParent(false);
   };
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-
+    searchedKeyword.current = e.target.value;
   };
 
   const handlePressEnter = () => {
-    setSearchResultVisible(true)
+    setSearchResultVisible(true);
+    const result = filterNodes(treeData)
+    setFilteredData(result)
+  };
+
+
+  const filterNodes = (nodes : NodeType[]) : NodeType[] => {
+    return nodes.reduce<NodeType[]>((acc, node)=> {
+      const exist = node.title.toLowerCase().includes(searchedKeyword.current.toLowerCase());
+      let filteredChildren: NodeType[] = []
+      if (node.children.length > 0) {
+        filteredChildren = filterNodes(node.children)
+      }
+
+      if (exist) {
+        acc.push({...node})
+
+      }
+
+      if ( filteredChildren.length > 0) {
+        acc.push(...filteredChildren)
+        
+      }
+
+      return acc;
+    }, [])
   }
+  
 
   const titleRenderer = (node: NodeType) => {
-    return <Node node={node} handleContextMenuClick={handleContextMenuClick} />
-  }
+    return <Node node={node} handleContextMenuClick={handleContextMenuClick} />;
+  };
+
+  
 
   return (
-    <div className='tree-wrap'>
-      <Search style={{ marginBottom: 8 }} placeholder="جستجو" onChange={handleSearchInputChange} onPressEnter={handlePressEnter} />
+    <div className="tree-wrap">
+      <Search
+        style={{ marginBottom: 8 }}
+        placeholder="جستجو"
+        onChange={handleSearchInputChange}
+        onPressEnter={handlePressEnter}
+      />
       <Tree
         onExpand={onExpand}
         expandedKeys={expandedKeys}
@@ -46,7 +81,7 @@ const TreeExtended: React.FC<Props> = ({ handleContextMenuClick }) => {
         treeData={treeData}
         titleRender={titleRenderer}
       />
-      {searchResultVisible && <SearchResult items={[]} />}
+      {searchResultVisible && <SearchResult items={filteredData} />}
     </div>
   );
 };
