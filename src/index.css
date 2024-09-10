@@ -47,3 +47,24 @@ body {
 	overflow: auto;
 	padding: 12px 6px;
 }
+
+.arrow-icon-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: gray;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	cursor: pointer;
+	margin: 10px auto;
+  }
+  
+  .arrow-icon-container:hover {
+	background-color: darkgray;
+  }
+  
+  .search-result-content {
+	overflow: auto;
+	transition: height 0.3s ease;
+  }
